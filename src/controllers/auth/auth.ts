@@ -35,4 +35,30 @@ export class Auth {
       ctx.body = error;
     }
   }
+
+  public async login(ctx: Context): Promise<void> {
+    try {
+      const { username, password } = ctx.request.body;
+      const user = await UserModel.findOne({ username: firstLetterUppercase(username) });
+      if (!user) {
+        ctx.response.status = HTTP_STATUS.NOT_FOUND;
+        ctx.body = { message: 'User not found' };
+      } else {
+        const isPasswordSave = await user.comparePassword(password);
+        if (!isPasswordSave) {
+          ctx.response.status = HTTP_STATUS.INTERNAL_SERVER_ERROR;
+          ctx.body = { message: 'Password is incorrect' };
+          return;
+        }
+        const userData = {
+          id: user._id,
+          username: user.username
+        };
+        const token = JWT.sign({ data: userData }, 'testsecret', {});
+        ctx.body = { message: 'Login successful', token };
+      }
+    } catch (error) {
+      ctx.body = error;
+    }
+  }
 }
