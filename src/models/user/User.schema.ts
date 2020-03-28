@@ -6,7 +6,10 @@ const userSchema: mongoose.Schema = new mongoose.Schema({
   username: { type: String },
   password: { type: String },
   role: { type: String},
-  date: { type: Date, default: Date.now }
+  date: { type: Date, default: Date.now },
+  tickets: [{
+    ticket: { type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' }
+  }]
 });
 
 userSchema.pre('save', async function(this: IUser, next) {
