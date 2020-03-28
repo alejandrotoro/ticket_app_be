@@ -2,6 +2,7 @@ import Router from 'koa-router';
 import { Auth } from './controllers/auth/auth';
 import { Ticket } from './controllers/ticket/ticket';
 import { verifyToken } from './helpers/auth';
+import { User } from './controllers/user/user';
 
 export function registerRoutes() {
   const router = new Router();
@@ -19,5 +20,9 @@ export function registerRoutes() {
   router.put('/tickets/:id', verifyToken, Ticket.prototype.editTicket);
   router.put('/tickets/mark-ticket/:id', verifyToken, Ticket.prototype.closeTicket);
   router.delete('/tickets/:_id', verifyToken, Ticket.prototype.deleteTicket);
+
+  // User routes
+  router.get('/user', verifyToken, User.prototype.getUser);
+
   return router;
 }
