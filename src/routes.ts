@@ -1,4 +1,5 @@
 import Router from 'koa-router';
+import { Auth } from './controllers/auth/auth';
 
 export function registerRoutes() {
   const router = new Router();
@@ -6,5 +7,7 @@ export function registerRoutes() {
   // router.get
   // router.post
   
+  // Auth routes
+  router.post('/register', Auth.prototype.create);
   return router;
 }
