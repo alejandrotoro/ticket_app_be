@@ -1,5 +1,5 @@
 import { Context } from 'koa';
-// import JWT from 'jsonwebtoken';
+import JWT from 'jsonwebtoken';
 import { UserModel } from './../../models/user/User.model';
 import HTTP_STATUS from 'http-status-codes';
 import { firstLetterUppercase } from '../../helpers/helpers';
@@ -20,7 +20,15 @@ export class Auth {
         };
 
         const createUser = await UserModel.create(body);
-        ctx.body = createUser;
+        const userData = {
+          id: createUser._id,
+          username: createUser.username
+        }
+        const token = JWT.sign({data: userData}, 'testsecret', {});
+        ctx.body = {
+          message: 'User created successfully',
+          token
+        };
       }
     } catch (error) {
       console.log(error);
